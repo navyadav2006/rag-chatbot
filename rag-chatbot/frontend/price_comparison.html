@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Price Comparison</title>
+    <!-- Copy the same CSS variables and base styles from index.html -->
+    <style>
+        :root {
+            --primary-color: #10a37f;
+            --primary-hover: #0d8a6a;
+            --background-color: #202123;
+            --message-bg-user: #e7f8f3;
+            --message-bg-bot: #f0f0f0;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif;
+        }
+    
+        body {
+            background-color: var(--background-color);
+            height: 100vh;
+            display: flex;
+        }
+
+        .comparison-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: var(--message-bg-bot);
+        }
+
+        .select-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .compare-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .compare-btn:hover {
+            background: var(--primary-hover);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <a href="index.html" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left">
+                <path d="m12 19-7-7 7-7"/>
+                <path d="M19 12H5"/>
+            </svg>
+            Back to Chat
+        </a>
+    </div>
+
+    <script>
+        // Define your Supabase URL and anon key
+        const SUPABASE_URL = 'https://wsyldoevqmzwjhpeoghs.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzeWxkb2V2cW16d2pocGVvZ2hzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDExODU4NDQsImV4cCI6MjA1Njc2MTg0NH0.4k6AtYDzgm8R4AFAMXxSecqlo4jR8rVh44-jPmPFheo';
+
+        // Create a single Supabase client instance using the global 'supabase' object
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Load products from Supabase
+        async function loadProducts() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('products')
+                    .select('id, product_name, brand, unit_price, stock_level');
+                
+                if (error) throw error;
+                
+                const select1 = document.getElementById('product1');
+                const select2 = document.getElementById('product2');
+                
+                data.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product.id;
+                    option.textContent = `${product.product_name} - ${product.brand}`;
+                    select1.appendChild(option.cloneNode(true));
+                    select2.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        // Compare selected products
+        async function compareProducts() {
+            const product1Id = document.getElementById('product1').value;
+            const product2Id = document.getElementById('product2').value;
+            
+            if (!product1Id || !product2Id) {
+                alert('Please select two products to compare');
+                return;
+            }
+
+            try {
+                const { data: products, error } = await supabaseClient
+                    .from('products')
+                    .select('*')
+                    .in('id', [product1Id, product2Id]);
+                
+                if (error) throw error;
+                
+                displayComparison(products);
+            } catch (error) {
+                console.error('Comparison error:', error);
+            }
+        }
+
+        function displayComparison(products) {
+            const resultsDiv = document.getElementById('comparison-results');
+            resultsDiv.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <h3>${product.product_name}</h3>
+                    <p><strong>Brand:</strong> ${product.brand}</p>
+                    <p><strong>Price:</strong> $${product.unit_price}</p>
+                    <p><strong>Stock:</strong> ${product.stock_level}</p>
+                    <p><strong>Description:</strong> ${product.description}</p>
+                </div>
+            `).join('');
+        }
+
+        // Load products when page loads
+        loadProducts();
+    </script>
+
+    <div class="comparison-container">
+        <h1>Product Comparison</h1>
+        <div class="select-container">
+            <select id="product1">
+                <option value="">Select Product 1</option>
+            </select>
+            <select id="product2">
+                <option value="">Select Product 2</option>
+            </select>
+        </div>
+        <button class="compare-btn" onclick="compareProducts()">Compare Products</button>
+        <div class="product-grid" id="comparison-results"></div>
+    </div>
+</body>
+</html>
