@@ -1,313 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Chatbot</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
     <style>
-        :root {
-            --primary-color: #10a37f;
-            --primary-hover: #0d8a6a;
-            --background-color: #202123;
-            --message-bg-user: #e7f8f3;
-            --message-bg-bot: #f0f0f0;
-            --text-color: #333333;
-            --border-color: #e0e0e0;
-        }
-    
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif;
-        }
-    
         body {
-            background-color: var(--background-color);
+            background-color: #0D0F12;
+            color: #ECECF1;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
-            display: flex;
+            margin: 0;
         }
-    
-        /* Sidebar styling */
-        .sidebar {
-            width: 260px;
-            background-color: #202123;
-            padding: 1rem;
-            color: white;
-            display: flex;
-            flex-direction: column;
-        }
-    
-        .new-chat-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-    
-        .new-chat-btn:hover {
-            background-color: var(--primary-hover);
-        }
-    
-        /* Main chat container */
-        .chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            max-width: 100%;
-            background-color: var(--background-color);
-        }
-    
-        /* Chat history */
-        #chat-history {
-            flex: 1;
-            overflow-y: auto;
+
+        .container {
+            background-color: #1E1F26;
             padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-    
-        /* Message bubbles */
-        .message {
-            max-width: 800px;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            margin: 0 2rem;
-            line-height: 1.5;
-            position: relative;
-        }
-    
-        .user-message {
-            background-color: var(--message-bg-user);
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-    
-        .bot-message {
-            background-color: var(--message-bg-bot);
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-        }
-    
-        /* Input container */
-        #input-container {
-            padding: 2rem;
-            background-color: var(--background-color);
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
-            position: relative;
-        }
-    
-        #user-input {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
             width: 100%;
-            padding: 1.2rem 2rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            max-width: 420px;
+            text-align: center;
+            border: 1px solid #2A2D34;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #ECECF1;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            text-align: left;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: #D1D5DB;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #3B3F45;
+            border-radius: 6px;
+            background-color: #23252B;
+            color: #ECECF1;
             font-size: 1rem;
-            resize: none;
-            background-color: white;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1rem;
+            transition: border-color 0.3s ease;
         }
-    
-        #user-input:focus {
+
+        input:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.2);
+            border-color: #10A37F;
+            box-shadow: 0 0 6px rgba(16, 163, 127, 0.6);
         }
-    
+
         button {
-            position: absolute;
-            right: 3rem;
-            bottom: 3rem;
-            background-color: var(--primary-color);
-            color: white;
+            width: 100%;
+            padding: 12px;
             border: none;
-            padding: 8px 14px;
+            background-color: #10A37F;
+            color: white;
+            font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
         }
-    
+
         button:hover {
-            background-color: var(--primary-hover);
+            background-color: #0D8A6A;
         }
-    
-        /* Loading animation */
-        .typing-indicator {
-            display: inline-block;
-            padding: 1rem;
+
+        .register-link {
+            margin-top: 1rem;
+            font-size: 0.9rem;
         }
-    
-        .typing-indicator span {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            margin-right: 3px;
-            background-color: #999;
-            border-radius: 50%;
-            animation: typing 1.4s infinite ease-in-out;
+
+        .register-link a {
+            color: #10A37F;
+            text-decoration: none;
+            font-weight: bold;
         }
-    
-        .typing-indicator span:nth-child(2) {
-            animation-delay: 0.2s;
+
+        .register-link a:hover {
+            text-decoration: underline;
         }
-    
-        .typing-indicator span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-    
-        @keyframes typing {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-    
-        /* Markdown styling */
-        .bot-message pre {
-            background-color: #f8f8f8;
-            padding: 1rem;
-            border-radius: 6px;
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
-    
-        .bot-message code {
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-            font-size: 0.9em;
-        }
-    
-        .bot-message p {
-            margin-bottom: 1rem;
-        }
-    
-        /* Mobile responsiveness */
-        @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-            
-            .message {
-                margin: 0 1rem;
-            }
-            
-            #input-container {
-                padding: 1rem;
-            }
-            
-            button {
-                right: 2rem;
-                bottom: 2rem;
-            }
-        }
-        .sidebar-link {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px;
-        color: #ececf1;
-        text-decoration: none;
-        border-radius: 6px;
-        margin: 4px 0;
-        transition: background-color 0.2s;
-    }
-    
-    .sidebar-link:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    .sidebar-link svg {
-        flex-shrink: 0;
-    }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <div class="sidebar">
-        <button class="new-chat-btn">+ New Chat</button>
-        <!-- Add Price Comparison Button -->
-        <a href="price_comparison.html" class="sidebar-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scale">
-                <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
-                <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
-                <path d="M7 21h10"/>
-                <path d="M12 3v18"/>
-                <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
-            </svg>
-            Product Comparison
-        </a>
-    </div>
-    <div class="chat-container">
-        <div id="chat-history"></div>
-        <div id="input-container">
-            <textarea id="user-input" rows="1" placeholder="Type your message..."></textarea>
-            <button onclick="sendMessage()">Send</button>
+    <div class="container">
+        <h1>Login</h1>
+        <form id="login-form">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+        </form>
+        <div class="register-link">
+            <p>Don't have an account? <a href="registration.html" id="register-link">Register here</a>.</p>
         </div>
     </div>
 
-    <script>// Auto-expanding textarea
-        document.getElementById('user-input').addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = this.scrollHeight + 'px';
-        });
-        
-        // Add loading animation
-        function addLoading() {
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'message bot-message typing-indicator';
-            loadingDiv.innerHTML = '<span></span><span></span><span></span>';
-            document.getElementById('chat-history').appendChild(loadingDiv);
-        }</script>
-
     <script>
-        // --- Helper functions MUST be defined FIRST ---
-        function addMessage(text, sender, isLoading = false) {
-            const history = document.getElementById('chat-history');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}-message${isLoading ? ' loading' : ''}`;
-            messageDiv.textContent = text;
-            history.appendChild(messageDiv);
-            history.scrollTop = history.scrollHeight; // Auto-scroll
-        }
-    
-        function removeLoadingMessage() {
-            const loadingMessages = document.querySelectorAll('.loading');
-            loadingMessages.forEach(msg => msg.remove());
-        }
-    
-        // Use Codespaces port forwarding URL format
-        const BACKEND_URL = `https://${window.location.hostname.replace('8000', '8001')}`;
-        
-        async function sendMessage() {
-            const input = document.getElementById('user-input');
-            const question = input.value.trim();
-            if (!question) return;
-    
-            addMessage(question, 'user');
-            input.value = '';
-            addMessage('Thinking...', 'bot', true);
-    
-            try {
-                const response = await fetch(`${BACKEND_URL}/ask`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({question})
-                });
-                
-                if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-                
-                const data = await response.json();
-                removeLoadingMessage();
-                addMessage(data.answer, 'bot');
-            } catch (error) {
-                removeLoadingMessage();
-                addMessage(`Error: ${error.message}`, 'bot');
-                console.error('Request failed:', error);
-            }
-        }
-    
-        // --- Initialize event listeners LAST ---
-        document.getElementById('user-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
+        document.addEventListener("DOMContentLoaded", async () => {
+            const SUPABASE_URL = "https://wsyldoevqmzwjhpeoghs.supabase.co";
+            const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzeWxkb2V2cW16d2pocGVvZ2hzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDExODU4NDQsImV4cCI6MjA1Njc2MTg0NH0.4k6AtYDzgm8R4AFAMXxSecqlo4jR8rVh44-jPmPFheo";
+            
+            // Initialize Supabase client
+            const supabase = window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_ANON_KEY
+            );
+
+            const form = document.getElementById("login-form");
+
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const email = e.target.email.value.trim().toLowerCase();
+                const password = e.target.password.value.trim();
+
+                try {
+                    console.log("Attempting login with:", email);
+                    
+                    const { data: users, error } = await supabase
+                        .from("users")
+                        .select("*")
+                        .eq("email", email)
+                        .eq("password", password);
+
+                    console.log("Supabase response:", users, error);
+
+                    if (error) throw error;
+                    if (!users || users.length === 0) {
+                        throw new Error("Invalid credentials");
+                    }
+
+                    // Store user data and verify storage
+                    localStorage.setItem("user", JSON.stringify(users[0]));
+                    console.log("Stored user:", localStorage.getItem("user"));
+                    
+                    // Cache-busted redirect
+                    window.location.href = `main.html?t=${Date.now()}`;
+
+                } catch (error) {
+                    console.error("Login error:", error);
+                    alert(`Login failed: ${error.message}`);
+                    localStorage.removeItem("user");
+                }
+            });
+
+            // Ensure registration link works without interference
+            document.getElementById("register-link").addEventListener("click", (e) => {
+                e.preventDefault();
+                window.location.href = "registration.html";
+            });
         });
     </script>
 </body>

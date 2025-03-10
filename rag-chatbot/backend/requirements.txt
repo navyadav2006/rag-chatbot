@@ -3,5 +3,10 @@ pinecone
 openai
 uvicorn
 python-dotenv
-psycopg2
+psycopg2-binary
 supabase
+PyJWT
+requests
+bcrypt
+pydantic
+fastapi-users

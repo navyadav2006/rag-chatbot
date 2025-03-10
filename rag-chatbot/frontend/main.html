@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+    <style>
+        :root {
+            --primary-color: #10a37f;
+            --primary-hover: #0d8a6a;
+            --background-color: #202123;
+            --message-bg-user: #e7f8f3;
+            --message-bg-bot: #f0f0f0;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+    
+        body {
+            background-color: var(--background-color);
+            height: 100vh;
+            display: flex;
+        }
+    
+        /* ========== Sidebar Styles ========== */
+        .sidebar {
+            width: 260px;
+            background-color: #202123;
+            padding: 1rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+    
+        .user-profile {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    
+        .user-profile p {
+            font-size: 14px;
+            color: #ececf1;
+            margin-bottom: 10px;
+        }
+    
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 6px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+    
+        .sidebar-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    
+        .logout-btn {
+            background-color: #d9534f;
+            justify-content: center;
+            margin-top: auto;
+        }
+    
+        .logout-btn:hover {
+            background-color: #c9302c;
+        }
+    
+        .new-chat-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+    
+        .new-chat-btn:hover {
+            background-color: var(--primary-hover);
+        }
+    
+        /* ========== Chat Container Styles ========== */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: calc(100% - 260px);
+            background-color: var(--background-color);
+        }
+    
+        #chat-history {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+    
+        .message {
+            max-width: 800px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 0 2rem;
+            line-height: 1.5;
+            position: relative;
+        }
+    
+        .user-message {
+            background-color: var(--message-bg-user);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+    
+        .bot-message {
+            background-color: var(--message-bg-bot);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+    
+        #input-container {
+            padding: 2rem;
+            background-color: var(--background-color);
+            position: relative;
+        }
+    
+        #user-input {
+            width: 100%;
+            padding: 1.2rem 2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: none;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+    
+        #input-container button {
+            position: absolute;
+            right: 3rem;
+            bottom: 3rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+    
+        #input-container button:hover {
+            background-color: var(--primary-hover);
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">    
+        <div class="user-profile">
+            <p>Logged in as: <span id="user-email">Loading...</span></p>
+        </div>
+        
+        <a href="#" class="sidebar-link logout-btn" onclick="logout(event)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" x2="9" y1="12" y2="12"/>
+            </svg>
+            Logout
+        </a>
+
+        <a href="price_comparison.html" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scale">
+                <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                <path d="M7 21h10"/>
+                <path d="M12 3v18"/>
+                <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
+            </svg>
+            Product Comparison
+        </a>
+    </div>
+
+    <div class="chat-container">
+        <div id="chat-history"></div>
+        <div id="input-container">
+            <textarea id="user-input" rows="1" placeholder="Type your message..."></textarea>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Session Management
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const user = JSON.parse(localStorage.getItem('user'));
+                if (!user) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+                document.getElementById('user-email').textContent = user.email;
+            } catch (e) {
+                console.error('Session error:', e);
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Logout Function
+        function logout(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            localStorage.removeItem('user');
+            window.location.href = `index.html?nocache=${Date.now()}`;
+        }
+
+        // Chat Functions
+        const BACKEND_URL = "https://zany-garbanzo-69wgvr4696rr2q59-8001.app.github.dev";
+
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const question = input.value.trim();
+            if (!question) return;
+
+            addMessage(question, 'user');
+            input.value = '';
+            addMessage('Thinking...', 'bot', true);
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/ask`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question })
+                });
+
+                const data = await response.json();
+                removeLoadingMessage();
+                addMessage(data.answer, 'bot');
+            } catch (error) {
+                removeLoadingMessage();
+                addMessage(`Error: ${error.message}`, 'bot');
+            }
+        }
+
+        function addMessage(text, sender, isLoading = false) {
+            const history = document.getElementById('chat-history');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message${isLoading ? ' loading' : ''}`;
+            messageDiv.textContent = text;
+            history.appendChild(messageDiv);
+            history.scrollTop = history.scrollHeight;
+        }
+
+        function removeLoadingMessage() {
+            document.querySelectorAll('.loading').forEach(msg => msg.remove());
+        }
+    </script>
+</body>
+</html>

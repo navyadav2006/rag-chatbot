@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        body {
+            background-color: #0D0F12;
+            color: #ECECF1;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #1E1F26;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            border: 1px solid #2A2D34;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #ECECF1;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            text-align: left;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: #D1D5DB;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #3B3F45;
+            border-radius: 6px;
+            background-color: #23252B;
+            color: #ECECF1;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #10A37F;
+            box-shadow: 0 0 6px rgba(16, 163, 127, 0.6);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background-color: #10A37F;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #0D8A6A;
+        }
+
+        .login-link {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .login-link a {
+            color: #10A37F;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Register</h1>
+        <form id="register-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Register</button>
+        </form>
+        <div class="login-link">
+            <p>Already have an account? <a href="index.html">Login here</a>.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const SUPABASE_URL = "https://wsyldoevqmzwjhpeoghs.supabase.co";
+            const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzeWxkb2V2cW16d2pocGVvZ2hzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDExODU4NDQsImV4cCI6MjA1Njc2MTg0NH0.4k6AtYDzgm8R4AFAMXxSecqlo4jR8rVh44-jPmPFheo";
+            
+            const supabase = window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_ANON_KEY
+            );
+
+            const form = document.getElementById("register-form");
+
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const email = e.target.email.value.trim().toLowerCase();
+                const password = e.target.password.value.trim();
+                const username = e.target.username.value.trim();
+
+                try {
+                    const { data, error } = await supabase
+                        .from('users')
+                        .insert([
+                            { 
+                                email: email,
+                                password: password,
+                                username: username
+                            }
+                        ])
+                        .select();
+
+                    if (error) throw error;
+                    
+                    alert('Registration successful! Please login.');
+                    window.location.href = 'index.html';
+
+                } catch (error) {
+                    console.error("Registration error:", error);
+                    alert(`Registration failed: ${error.message}`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

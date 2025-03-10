@@ -1,11 +1,11 @@
 {
-    "name": "RAG Chatbot",
-    "dockerFile": "../Dockerfile",
-    "forwardPorts": [8000, 8001],
-    "postCreateCommand": "pip install -r backend/requirements.txt && python backend/ingest.py",
-    "customizations": {
-      "codespaces": {
-        "openFiles": ["frontend/index.html"]
-      }
+  "name": "RAG Chatbot",
+  "dockerFile": "../Dockerfile",
+  "forwardPorts": [8000, 8001],
+  "postCreateCommand": "pip install -r /workspaces/rag-chatbot/rag-chatbot/backend/requirements.txt && /workspaces/rag-chatbot/rag-chatbot/backend/ingest.py",
+  "customizations": {
+    "codespaces": {
+      "openFiles": ["frontend/index.html"]
     }
   }
+}
