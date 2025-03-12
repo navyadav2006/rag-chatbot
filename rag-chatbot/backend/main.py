@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 # 🔹 Hardcoded API Keys (Security Risk for Production)
 SUPABASE_URL = "https://wsyldoevqmzwjhpeoghs.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzeWxkb2V2cW16d2pocGVvZ2hzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDExODU4NDQsImV4cCI6MjA1Njc2MTg0NH0.4k6AtYDzgm8R4AFAMXxSecqlo4jR8rVh44-jPmPFheo"
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "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"
 PINECONE_API_KEY = "pcsk_3gR846_RefFWHrEhBgeRxEixtMkFvJ1Y28NQL5bkGvT1H8X2cnDPdsDswNyvfY7AXrQMUN"
 PINECONE_INDEX_NAME = "rag-chatbot"
 
